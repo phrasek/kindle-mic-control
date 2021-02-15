@@ -7,7 +7,7 @@ import pyaudio
 from ahk import AHK
 from ahk.directives import NoTrayIcon
 
-Threshold = 15
+Threshold = 15  # threshold for noise to trigger page turn
 
 SHORT_NORMALIZE = 1.0 / 32768.0
 chunk = 1024
@@ -16,7 +16,8 @@ CHANNELS = 1
 RATE = 16000
 swidth = 2
 
-debounce = 5
+debounce = 0.25
+left_threshold = 2.5  # a second trigger within the period left_threshold - debounce will turn the page left
 
 kindle_path = r"path\\to\\kindle.exe"
 ahk_path = r"path\\to\\autohotkey.exe"
@@ -58,10 +59,10 @@ class Listener:
             input = self.stream.read(chunk)
             rms_val = self.rms(input)
 
-            if rms_val > Threshold and (lasttime - time.time()) < -2.5:
+            if rms_val > Threshold and (lasttime - time.time()) < -left_threshold:
                 self.handler("right")
                 lasttime = time.time()
-            elif rms_val > Threshold and (lasttime - time.time()) < -0.25:
+            elif rms_val > Threshold and (lasttime - time.time()) < -debounce:
                 self.handler("left")
                 self.handler("left")
                 lasttime = time.time()
