@@ -19,8 +19,8 @@ swidth = 2
 debounce = 0.25
 left_threshold = 2.5  # a second trigger within the period left_threshold - debounce will turn the page left
 
-kindle_path = r"path\\to\\kindle.exe"
-ahk_path = r"path\\to\\autohotkey.exe"
+kindle_path = r"path\to\kindle.exe"
+ahk_path = r"path\to\autohotkey.exe"
 
 """
 Handsfree kindle reading using a microphone and the PyAudio package
@@ -66,15 +66,17 @@ class Listener:
             input = self.stream.read(chunk)
             rms_val = self.rms(input)
 
-            if rms_val > Threshold and (lasttime - time.time()) < -left_threshold:
+            if (
+                rms_val > Threshold and (lasttime - time.time()) < -left_threshold
+            ):  # turn right
                 self.handler("right")
                 lasttime = time.time()
-            elif rms_val > Threshold and (lasttime - time.time()) < -debounce:
+            elif (
+                rms_val > Threshold and (lasttime - time.time()) < -debounce
+            ):  # turn left
                 self.handler("left")
                 self.handler("left")
                 lasttime = time.time()
-            elif rms_val > Threshold:
-                pass
 
 
 def handler(key):
@@ -85,7 +87,9 @@ def handler(key):
         win.to_top()
         ahk.key_press(key)
     except AttributeError:
-        pass
+        print(
+            "Could not find kindle window, make sure kindle application is running and check kindle executable path"
+        )
 
 
 def keyboardInterruptHandler(signal, frame):
