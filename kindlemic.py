@@ -22,6 +22,13 @@ left_threshold = 2.5  # a second trigger within the period left_threshold - debo
 kindle_path = r"path\\to\\kindle.exe"
 ahk_path = r"path\\to\\autohotkey.exe"
 
+"""
+Handsfree kindle reading using a microphone and the PyAudio package
+Uses autohotkey to switch to kindle application and turn pages when triggered
+whistle once to turn page right, twice to turn left
+adjust threshold, debounce, and left_threshold to suit preference
+"""
+
 
 class Listener:
     @staticmethod
